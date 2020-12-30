@@ -20,7 +20,8 @@ class Particletype : public Boxcountingfractaldimension {
 		void Fractaldimension();
 		std::vector<vector<double> > matrixinfo;
 		std::vector<vector<int> > malla;
-		
+		std::vector<vector<double> > matrixinfocopy;
+	
 };
 class Help{
 public:

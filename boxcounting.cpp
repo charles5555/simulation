@@ -9,7 +9,7 @@ Boxcountingfractaldimension::Boxcountingfractaldimension(){
 	cout << "the program is starting" << endl;
 }
 Particletype::Particletype(){
-	m=10;
+	m=1;
 }
 Particletype::Particletype(int tama){
 	m=tama;
@@ -23,7 +23,7 @@ int Particletype::Openfileandsavedata() {
 	xmax=-1.0e+100;
 	ifstream inFile;
 
-	inFile.open("cluster-2e4.dat");
+	inFile.open("cluster-2e5.dat");
 	if (!inFile) {
 		cout << "Unable to open file";
 		return EXIT_FAILURE ;
@@ -70,86 +70,125 @@ int Particletype::Openfileandsavedata() {
 }
 int Particletype::Sortdata(){
 	int ty;
+	int totcajas;
+	double deltax, deltay, segmentox, segmentoy, total,xmaxp, ymaxp;
 	cout << "Choose one method to calculate fractal dimension:" << endl;
 	cout << "Box counting, type 1" << endl;
 	cout << "Exit, type 0" << endl;
 	cin >> ty;
-	if (ty==1){	
-		malla.resize(m);
-		for (int i=0; i<m; ++i){
-			malla[i].resize(m);
-		}
-		for (int i=0; i<count; ++i){
-			matrixinfo[i][0]=matrixinfo[i][0]+abs(xmin);
-			matrixinfo[i][1]=matrixinfo[i][1]+abs(ymin);
-		}
+	//std::vector<vector<double> > matrixinfocopy;
+	matrixinfocopy.resize(count);
+	for (int i=0; i<count; i++){
+		matrixinfocopy[i].resize(2);
+	}
+	if (ty==1){
+		//for (int l=0; l<15; ++l){	
+			malla.resize(m);
+			for (int i=0; i<m; ++i){
+				malla[i].resize(m);
+			}
+			for (int i=0; i<count; ++i){
+				matrixinfocopy[i][0]=matrixinfo[i][0]+abs(xmin);
+				matrixinfocopy[i][1]=matrixinfo[i][1]+abs(ymin);
+			}
 	
-		for (int i=0; i<count; ++i){
-			for (int j=0; j<2; ++j){
-				if (matrixinfo[i][j]<0){
-					cout << "There is a value less than zero" << endl;
-					return EXIT_FAILURE;
-				}
-			//	cout << "la entrada matrixinfo["<< i <<"]["<< j <<"] es: "<< matrixinfo[i][j] << endl;  
-			}
-		}
-		xmax=xmax+abs(xmin);
-		ymax=ymax+abs(ymin);
-		cout << "xmax= " << xmax << endl;
-		cout << "ymax= " << ymax << endl;
-		double deltax=xmax/m;
-		double deltay=ymax/m;
-		double segmentox=xmax/m;
-		cout << "segmentox: " << segmentox << endl;
-		double segmentoy=ymax/m;
-		cout << "segmentoy: " << segmentoy << endl;
-		std::vector<bool> key(count, false);
-		//key.resize(count);
-		//for (int i=0; i<count; i++){
-		//	key[i]=false;			
-		//}
-		//for (int i=0; i<4; ++i){
-		//	cout << "key[" << i << "] es: " << key[i] << endl;
-		//}
-		for (int i=0; i<m; i++){
-			for (int j=0; j<m; j++){
-				for (int k=0; k<count; k++){
-				//	cout << "segmento*(i)= " << segmento*(i) << endl;
-					if (!key[k]){
-					
-				//	cout << "malla[" << i << "][" << j << "]= " << malla[i][j] << endl;
-				//	cout << "matrixinfo[" << k << "][0]= " << matrixinfo[k][0] << endl;
-						if (matrixinfo[k][0]>=segmentox*(i) && matrixinfo[k][0]<=segmentox*(i+1)){
-				//			cout << "matrixinfo[" << k << "][1]= " << matrixinfo[k][1] << endl;
-							if (matrixinfo[k][1]>=segmentoy*(j) && matrixinfo[k][1]<=segmentoy*(j+1)){
-								malla[i][j]=malla[i][j]+1;
-								key[k]=true;
-							}
-						}					
+			for (int i=0; i<count; ++i){
+				for (int j=0; j<2; ++j){
+					if (matrixinfocopy[i][j]<0){
+						cout << "There is a value less than zero" << endl;
+						return EXIT_FAILURE;
 					}
+			//		cout << "la entrada matrixinfocopy["<< i <<"]["<< j <<"] es: "<< matrixinfocopy[i][j] << endl;  
 				}
 			}
-		}
-		int total=0;
-		for (int i=0; i<m; ++i){
-			for (int j=0; j<m; ++j){
-			//	cout << "en la caja [" << i << "][" << j << "] hay " << malla[i][j] << " partículas" << endl;
-				total=total+malla[i][j];	
+			xmaxp=xmax;
+			ymaxp=ymax;
+			xmaxp=xmaxp+abs(xmin);
+			ymaxp=ymaxp+abs(ymin);
+			int indicex=0;
+			int indicey=0;
+			cout << "xmaxp= " << xmaxp << endl;
+			cout << "ymaxp= " << ymaxp << endl;
+		        deltax=xmaxp/m;
+			deltay=ymaxp/m;
+			segmentox=xmaxp/m;
+			cout << "segmentox: " << segmentox << endl;
+			segmentoy=ymaxp/m;
+			cout << "segmentoy: " << segmentoy << endl;
+			//key(count, false);
+			//for (int i=0; i<count; i++){
+			//	key.push_back(false);
+			//}
+			//key.resize(count);
+			//for (int i=0; i<count; i++){
+			//	key[i]=false;			
+			//}
+			//std::vector<bool> key(count, false);
+			//for (int i=0; i<4; ++i){
+			//	cout << "key[" << i << "] es: " << key[i] << endl;
+			//}
+			for (int i=0; i<count; i++){
+				indicex=0;
+				indicey=0;
+				//preindicex=matrixinfocopy[i][0]/segmentox;
+				//preindicey=matrixinfocopy[i][1]/segmentoy;
+				indicex=floor((matrixinfocopy[i][0])/(segmentox));
+				indicey=floor((matrixinfocopy[i][1])/(segmentoy));
+				if (indicex==m){indicex=indicex-1;}
+				if (indicey==m){indicey=indicey-1;}
+				//cout << "El contador es " << i << endl;
+				//cout << "indicex= " << indicex << endl;
+				//cout << "indicey= " << indicey << endl;
+				malla[indicex][indicey]=malla[indicex][indicey]+1;
+				//for (int j=0; j<m; j++){
+					//for (int k=0; k<count; k++){
+					////	cout << "segmento*(i)= " << segmento*(i) << endl;
+						//if (!key[k]){
+					
+					////	cout << "malla[" << i << "][" << j << "]= " << malla[i][j] << endl;
+					////	cout << "matrixinfocopy[" << k << "][0]= " << matrixinfocopy[k][0] << endl;
+							//if (matrixinfocopy[k][0]>=segmentox*(i) && matrixinfocopy[k][0]<=segmentox*(i+1)){
+					////			cout << "matrixinfocopy[" << k << "][1]= " << matrixinfocopy[k][1] << endl;
+								//if (matrixinfocopy[k][1]>=segmentoy*(j) && matrixinfocopy[k][1]<=segmentoy*(j+1)){
+									//malla[i][j]=malla[i][j]+1;
+									//key[k]=true;
+								//}
+							//}					
+						//}
+					//}
+				//}
 			}
-		}
-		//for (int i=0; i<count; ++i){
-		//	cout << key[i] << endl;
+			total=0;
+			for (int i=0; i<m; ++i){
+				for (int j=0; j<m; ++j){
+					//cout << "en la caja [" << i << "][" << j << "] hay " << malla[i][j] << " partículas" << endl;
+					total=total+malla[i][j];	
+				}
+			}
+			//for (int i=0; i<count; ++i){
+			//	cout << key[i] << endl;
+			//}
+			cout << "el número total de partículas es: " << total << endl;
+		        totcajas=0;
+			for (int i=0; i<m; i++){
+				for (int j=0; j<m; j++){
+					//cout << "malla[" << i << "][" << j << "]= " << malla[i][j] << endl;
+					if (malla[i][j]!=0){ totcajas=totcajas+1;}
+					//cout << "totcajas= " << totcajas << endl;
+				}
+			}
+			cout << "El número necesario de cajas para cubrir el cluster es de: " << totcajas << " cajas" << endl;	
+			//m=m-(l+1);
+			//delete [] malla;
+			malla.clear();
+
+			//delete [] key;
+			//key.clear();
+
+			//delete [] matrixinfocopy;
+			matrixinfocopy.clear();
+			
 		//}
-		cout << "el número total de partículas es: " << total << endl;
-		int totcajas=0;
-		for (int i=0; i<m; i++){
-			for (int j=0; j<m; j++){
-				//cout << "malla[" << i << "][" << j << "]= " << malla[i][j] << endl;
-				if (malla[i][j]!=0){ totcajas=totcajas+1;}
-				//cout << "totcajas= " << totcajas << endl;
-			}
-		}
-		cout << "El número necesario de cajas para cubrir el cluster es de: " << totcajas << " cajas" << endl;	
 		return 0;
 	}
 	else if (ty==0){return EXIT_FAILURE;}
