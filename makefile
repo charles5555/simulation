@@ -3,11 +3,11 @@ F=g++
 
 all: test
 
-test: boxcounting.o test.o
-	$(F) boxcounting.o test.o -o test
+test: simulation.o test.o
+	$(F) simulation.o test.o -o test
 test.o: test.cpp
 	$(G) -c test.cpp -o test.o
-boxcounting.o: boxcounting.cpp
-	$(G) -c boxcounting.cpp -o boxcounting.o
+simulation.o: simulation.cpp
+	$(G) -c simulation.cpp -o simulation.o
 clean:
-	rm test boxcounting.o test.o
+	rm test simulation.o test.o

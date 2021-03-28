@@ -3,16 +3,13 @@
 #include <fstream>
 #include <string>
 #include <cmath>
-#include "boxcounting.h"
+#include "simulation.h"
 
 int main (int argc, char *argv[]) {
-	//int s=std::stoi(string(argv[1]));
-	int tama=std::stoi(string(argv[1]));
-	//std::cout << "s: " << s << '\n';
-	std::cout << "tama: " << tama << '\n';
-	Particletype cluster1(tama);
-	cluster1.Openfileandsavedata();
-	cluster1.Sortdata();
+	int m=std::stoi(string(argv[1]));
+	Particletype s(m);
+	s.Openfileandsavedata();
+	s.Sortdata();
 
 	return EXIT_SUCCESS;
 }
