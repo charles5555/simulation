@@ -3,6 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <cmath>
+#include <typeinfo>
 using namespace std;
 #include "simulation.h"
 Beginsimulation::Beginsimulation(){
@@ -11,13 +12,15 @@ Beginsimulation::Beginsimulation(){
 Particletype::Particletype(){ // constructor sin valores
 	init=0;	
 }
-Particletype::Particletype(int m){ // constructor con valores
-	init=m;
+Particletype::Particletype(int times1){ // constructor con valores
+	times=times1;
 }
 int Particletype::Openfileandsavedata() { // como guardar los datos
 	string line;
 	totalcells=0;
 	totallines=0;
+	time=1.0;
+	alpha=1.0;
 	ifstream inFile;
 	inFile.open("cellsdata1.dat"); // abre el archivo cellsdata.dat
 	if (!inFile) {
@@ -46,6 +49,7 @@ int Particletype::Openfileandsavedata() { // como guardar los datos
 	//}
 // abrimos el archivo donde está la información de las partículas
 	totalparticles=0;
+	totallines1=0;
 	inFile.open("particlesdata.dat");
 	if (!inFile){
 		cout << "Unable to open file" << endl;
@@ -66,11 +70,11 @@ int Particletype::Openfileandsavedata() { // como guardar los datos
 		inFile >> particles[i][0] >> particles[i][1] >> particles[i][2] >> particles[i][3] >> particles[i][4];
 	}
 	inFile.close();
-	for (int i=0; i<totalparticles; ++i){
-		for (int j=0; j<5; ++j){
-			cout << "particles[" << i << "][" << j << "]= " << particles[i][j] << endl;
-		}
-	}
+	//for (int i=0; i<totalparticles; ++i){
+	//	for (int j=0; j<5; ++j){
+	//		cout << "particles[" << i << "][" << j << "]= " << particles[i][j] << endl;
+	//	}
+	//}
 	return 0;
 }
 int Particletype::Sortdata() {
@@ -93,11 +97,13 @@ int Particletype::Sortdata() {
 	for (int i=0; i<xdimension; ++i){
 		for (int j=0; j<ydimension; ++j){
 			for (int k=0; k<zdimension; ++k){
-				matrixinfo[i][j][k].resize(3);
+				matrixinfo[i][j][k].resize(4);
 			}
 		}
 	}
+	energypercell=0.0;
 	for (int i=1; i<totallines; ++i){
+		energypercell=energypercell+info[i][1];
 		matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]=info[i][0];
 		matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1]=info[i][1];
 		matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][2]=6.0;
@@ -109,48 +115,145 @@ int Particletype::Sortdata() {
 		}
 		if (static_cast<int>(info[i][4])-1 == 0 or static_cast<int>(info[i][4])-1 == zdimension-1){
 			matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][2]-=1;
-		}	
+		}
+		if (matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[i][2]-1)][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1]<0){
+			matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][3]=-exp((matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1])*time);
+		}
+		if (matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[i][2]-1)][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1]>0){
+			matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][3]=exp(-(matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1])*time);
+		}
+		if (matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[i][2]-1)][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1]==0){
+			matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][3]=0.0;
+		}
 	}
 	//for (int i=0;i<xdimension; ++i){
 	//	for (int j=0; j<ydimension; ++j){
 	//		for (int k=0; k<zdimension; ++k){
-				//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][0]= " << matrixinfo[i][j][k][0] << endl;
-				//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][1]= " << matrixinfo[i][j][k][1] << endl;
-				//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][2]= " << matrixinfo[i][j][k][2] << endl;
-			//}
-		//}
+	//			cout << "matrixinfo[" << i << "][" << j << "][" << k << "][0]= " << matrixinfo[i][j][k][0] << endl;
+	//			cout << "matrixinfo[" << i << "][" << j << "][" << k << "][1]= " << matrixinfo[i][j][k][1] << endl;
+	//			cout << "matrixinfo[" << i << "][" << j << "][" << k << "][2]= " << matrixinfo[i][j][k][2] << endl;
+	//			cout << "matrixinfo[" << i << "][" << j << "][" << k << "][3]= " << matrixinfo[i][j][k][3] << endl;
+	//		}
+	//	}
 	//}
-	cout << "totalparticles= " << totalparticles << endl;
-	cout << "xdimension= " << xdimension << endl;
-	matrixparticles.resize(totalparticles);
-	for (int i=0; i<totalparticles; ++i){
-		matrixparticles[i].resize(xdimension);
+	//
+	//cout << "totalparticles= " << totalparticles << endl;
+	//cout << "xdimension= " << xdimension << endl;
+	//matrixparticles.resize(totalparticles);
+	//for (int i=0; i<totalparticles; ++i){
+	//	matrixparticles[i].resize(xdimension);
+	//}
+	//for (int i=0; i<totalparticles; ++i){
+	//	for (int j=0; j<xdimension; ++j){
+	//		matrixparticles[i][j].resize(ydimension);
+	//	}
+	//}
+	//for (int i=0; i<totalparticles; ++i){
+	//	for (int j=0; j<xdimension; ++j){
+	//		for (int k=0; k<ydimension; ++k){
+	//			matrixparticles[i][j][k].resize(zdimension);
+	//		}
+	//	}
+	//}
+	//
+	//for (int i=0; i<totalparticles; ++i){
+	//	matrixparticles[static_cast<int>(particles[i][0])-1][static_cast<int>(particles[i][1])-1][static_cast<int>(particles[i][2])-1][static_cast<int>(particles[i][3])-1]=particles[i][4];
+	//}
+	//for (int i=0; i<totalparticles; ++i){
+	//	for (int j=0; j<xdimension; ++j){
+	//		for (int k=0; k<ydimension; ++k){
+	//			for (int l=0; l<zdimension; ++l){
+	//				cout << "matrixparticles[" << i << "][" << j << "][" << k << "][" << l << "]= " << matrixparticles[i][j][k][l] << endl;
+	//			}
+	//		}
+	//	}
+	//}
+	return 0;
+}
+int Particletype::Simulation(int times, int functionform){
+	cout << "times= " << times << endl;
+	//cout << "times es una variable tipo " << typeid(times).name() << endl;
+	matrixsimulation.resize(times);
+	for (int i=0; i<times; ++i){
+		matrixsimulation[i].resize(xdimension);
 	}
-	for (int i=0; i<totalparticles; ++i){
+	for (int i=0; i<times; ++i){
 		for (int j=0; j<xdimension; ++j){
-			matrixparticles[i][j].resize(ydimension);
+			matrixsimulation[i][j].resize(ydimension);
 		}
 	}
-	for (int i=0; i<totalparticles; ++i){
+	for (int i=0; i<times; ++i){
 		for (int j=0; j<xdimension; ++j){
 			for (int k=0; k<ydimension; ++k){
-				matrixparticles[i][j][k].resize(zdimension);
+				matrixsimulation[i][j][k].resize(zdimension);
 			}
 		}
 	}
-	//
-	for (int i=0; i<totalparticles; ++i){
-		matrixparticles[static_cast<int>(particles[i][0])-1][static_cast<int>(particles[i][1])-1][static_cast<int>(particles[i][2])-1][static_cast<int>(particles[i][3])-1]=particles[i][4];
-	}
-	for (int i=0; i<totalparticles; ++i){
+	for (int i=0; i<times; ++i){
 		for (int j=0; j<xdimension; ++j){
 			for (int k=0; k<ydimension; ++k){
 				for (int l=0; l<zdimension; ++l){
-					cout << "matrixparticles[" << i << "][" << j << "][" << k << "][" << l << "]= " << matrixparticles[i][j][k][l] << endl;
+					matrixsimulation[i][j][k][l].resize(1);
 				}
 			}
 		}
 	}
+	particlepercell=0.0;
+	particlepercell=totalparticles/totalcells;
+	
+	restrictionsuma.resize(times);
+	cout << "times = " << times << endl;
+	if (functionform==0){ //Exponencial
+		for (int i=0; i<times; ++i){
+			for (int j=1; j<totallines; ++j){
+				if ((particlepercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1])<0){
+			matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=-exp(((particlepercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]))*time);
+				}
+				if ((particlepercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1])>0){
+			matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=exp(-((particlepercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]))*time);
+				}
+				if ((particlepercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1])==0){
+			matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=0.0;
+				}
+				restrictionsuma[i]=restrictionsuma[i]+matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0];
+
+			}
+			time=time+1.0;
+		}
+	}
+	//if (functionform==1){ //Potencia
+	//	t0=5.0;
+	//	for (int i=0; i<times; ++i){
+	//		for (int j=0; j<totallines; ++j){
+	//			if (matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]<0){
+	//		matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=-(time+t0)**((matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]));
+	//			}
+	//			if (matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]>0){
+	//		matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=(time+t0)**(-(matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]));
+	//			}
+	//			if (matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]+alpha*matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]==0){
+	//		matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=0.0;
+	//			}	
+	//		}
+	//		times=times+1.0;
+	//	}
+	//}
+	else {
+		cout << "Invalid form" << endl;
+		return EXIT_FAILURE;
+		}
+	for (int i=0; i<times; ++i){
+		cout << "restrictionsuma[" << i << "]= " << restrictionsuma[i] << endl;
+	}
+	//for (int i=0; i<times; ++i){
+	//	for (int j=0; j<xdimension; ++j){
+	//		for (int k=0; k<ydimension; ++k){
+	//			for (int l=0; l<zdimension; ++l){
+	//				cout << "matrixsimulation[" << i << "][" << j << "][" << k << "][" << l << "][" << 0 << "]= " << matrixsimulation[i][j][k][l][0] << endl; 
+	//			}
+	//		}
+	//	}
+	//}
 	return 0;
 }
 	

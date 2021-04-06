@@ -7,7 +7,8 @@ using namespace std;
 class Beginsimulation {
 public:
 	Beginsimulation();
-	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1;
+	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform;
+	double alpha, time, coef, t0, particlepercell, energypercell;
 };
 class Particletype : public Beginsimulation {
 	public:
@@ -15,10 +16,13 @@ class Particletype : public Beginsimulation {
 	        Particletype(int);
 		int Openfileandsavedata();
 		int Sortdata();
+		int Simulation(int, int);
 		std::vector<vector<vector<vector<double> > > > matrixinfo;
 		std::vector<vector<double> > info;
 		std::vector<vector<double> > particles;
 		std::vector<vector<vector<vector<double> > > > matrixparticles;
+		std::vector<vector<vector<vector<vector<double> > > > > matrixsimulation;
+		std::vector<double> restrictionsuma;
 };
 class Help {
 public: 

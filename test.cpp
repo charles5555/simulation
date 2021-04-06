@@ -3,13 +3,16 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <typeinfo>
 #include "simulation.h"
 
 int main (int argc, char *argv[]) {
-	int m=std::stoi(string(argv[1]));
-	Particletype s(m);
+	int times1=std::stoi(string(argv[1]));
+	int functionform=std::stoi(string(argv[2]));
+	Particletype s(times1);
 	s.Openfileandsavedata();
 	s.Sortdata();
+	s.Simulation(times1, functionform);
 
 	return EXIT_SUCCESS;
 }
