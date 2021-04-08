@@ -2,11 +2,25 @@ El archivo con extensión cellsdata.dat, para que lo lea el simulador debe estar
 1.- El archivo debe dividirse en 5 columnas cada una separadas entre sí por un espacio.
 2.- De la primera línea, el primer elemento corresponde a la dimensión en el eje x, el segundo elemento a la dimensión en el eje y y el tercero a la dimensión en el eje z.
 3.- Los otros dos elementos sobrantes en la primera linea vienen predeterminados como ceros pero no son útiles para la simulación.
-4.- De la segunda fila en adelante, el primer elemento indica el número de partículas de la celda, el segundo elemento indica la energía de la celda, los últimos 3 eleméntos indican en qué posición se encuentra dicha celda (x,y,z).
+4.- De la segunda fila en adelante, el primer elemento indica el potencial químico de la celda, el segundo elemento indica la energía de la celda (temperatura) "a considerar", los últimos 3 eleméntos indican en qué posición se encuentra dicha celda (x,y,z).
 
 El archivo particlesdara.dat estará ordenado de la siguiente forma:
 1.- El archivo contiene 5 columnas.
 2.- La primera columna indica el numero de partícula.
 3.- El segundo, tercer y cuarto elemento indican la ubicación en el eje x, y, z de la celda en que se encuentra respectivamente.
 4.- El último elemento indica la energía que tiene dicha partícula.
+
+Al correr el programa se debe ingresar "2 números separados por un espacio" (a modificación), el primer número indica el número número de iteraciones (o cuantas veces va a correr el tiempo de 1s en 1s), el segundo número indica la forma funcional que se utilizará:
+1.- El número 0 indica la forma funcional de una exponencial.
+2.- El número 1 indica la forma funcional de una relación de escalamiento.
+
+El simulador escribe genera "2" archivos (a modificar), el primero, llamado outputdata.dat, contiene la siguiente información:
+1.- En la primera columna está el número de iteraciones (o cuantas veces corrió el tiempo de un segundo en un segundo).
+2.- La segunda y tercera columna indican el número de partículas y la energía de la primera celda respectivamente dadas al tiempo de la iteración. (La primera celda corresponde a la primera celda enumeraa en el archivo de entrada).
+3.- La cuarta y quinta columna indican igualmente el número de partículas y la energía respectivamente de la segunda celda correspondiente al tiempo de la iteración. Este proceso se repite hasta terminar el número de celdas propuesto en el archivo de entrada.
+
+El segundo archivo, llamado restrictionsdata.dat, contiene la siguiente información:
+1.- En la primera columna está el número de iteraciones.
+2.- En la segunda columna contiene el valor de la restricción de conservación de número de partículas en el sistema correspondiente al valor de la iteración (tiempo).
+3.- En la tercera columna contiene el valor de la restricción de conservación de la energía en el sistema correspondiente al valor de la iteración (tiempo).
 

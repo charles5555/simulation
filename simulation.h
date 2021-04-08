@@ -17,12 +17,14 @@ class Particletype : public Beginsimulation {
 		int Openfileandsavedata();
 		int Sortdata();
 		int Simulation(int, int);
+		int Exportdata();
 		std::vector<vector<vector<vector<double> > > > matrixinfo;
 		std::vector<vector<double> > info;
 		std::vector<vector<double> > particles;
 		std::vector<vector<vector<vector<double> > > > matrixparticles;
 		std::vector<vector<vector<vector<vector<double> > > > > matrixsimulation;
 		std::vector<double> restrictionsuma;
+		std::vector<double> restrictionenergysuma;
 };
 class Help {
 public: 

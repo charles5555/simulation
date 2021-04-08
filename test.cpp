@@ -13,6 +13,7 @@ int main (int argc, char *argv[]) {
 	s.Openfileandsavedata();
 	s.Sortdata();
 	s.Simulation(times1, functionform);
+	s.Exportdata();
 
 	return EXIT_SUCCESS;
 }

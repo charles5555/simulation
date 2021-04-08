@@ -10,4 +10,4 @@ test.o: test.cpp
 simulation.o: simulation.cpp
 	$(G) -c simulation.cpp -o simulation.o
 clean:
-	rm test simulation.o test.o
+	rm test simulation.o test.o outputdata.dat restrictionsdata.dat
