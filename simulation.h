@@ -8,7 +8,7 @@ class Beginsimulation {
 public:
 	Beginsimulation();
 	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform;
-	double alpha, time, coef, t0, particlepercell, energypercell;
+	double alpha, time, coef, t0, particlepercell, energypercell, energyspectre;
 };
 class Particletype : public Beginsimulation {
 	public:
@@ -25,6 +25,7 @@ class Particletype : public Beginsimulation {
 		std::vector<vector<vector<vector<vector<double> > > > > matrixsimulation;
 		std::vector<double> restrictionsuma;
 		std::vector<double> restrictionenergysuma;
+		std::vector<double> vectorenergyspectre;
 };
 class Help {
 public: 
