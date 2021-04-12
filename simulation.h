@@ -7,8 +7,8 @@ using namespace std;
 class Beginsimulation {
 public:
 	Beginsimulation();
-	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform;
-	double alpha, time, coef, t0, particlepercell, energypercell, energyspectre;
+	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform, particlespercell;
+	double alpha, time, coef, t0, energypercell, energyspectre, totalenergy;
 };
 class Particletype : public Beginsimulation {
 	public:
