@@ -1,0 +1,8 @@
+Este programa está enfocado a crear un archivo de datos aleatorios de potenciales químicos y temperaturas para un conjunto de celdas.
+El programa requiere que metamos 6 entradas:
+1.- La primera es el número de partículas por celda (o el potencial químico de cada celda) en el equilibrio.
+2.- La segunda entrada es la energía de cada celda (o la temperatura de cada celda) en el equilibrio.
+3.- La tercera, cuarta y quinta entrada son el número de celdas en cada eje coordenado.
+4.- La sexta entrada requiere poner los siguientes números:
+	a) El 1 si requerimos un conjunto discreto de la energía.
+	b) El 0 si requerimos un conjunto continuo de la energía.

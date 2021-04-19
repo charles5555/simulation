@@ -27,8 +27,8 @@ Particletype::Particletype(){
 }
 Particletype::Particletype(int particlespercell, int energypercell, double xdimension, double ydimension, double zdimension, int numberespectre){
 	cout << "Se ha introducido los valores que se requieren" << endl;
-	cout << "Número de partículas por celda en equilibrio = " << particlespercell << endl;
-	cout << "Energía por celda en el equilibrio = " << energypercell << endl;
+	cout << "Número de partículas por celda en equilibrio (o potencial químico por cada celda)= " << particlespercell << endl;
+	cout << "Energía por celda en el equilibrio (o temperatura por celda)= " << energypercell << endl;
 	cout << "La malla tridimensional tendra una dimensión de " << xdimension << "X" << ydimension << "X" << zdimension << endl;
 }
 int Particletype::Generationdata(int particlespercell, int numberespectre, double xdimension, double ydimension, double zdimension) {
@@ -67,13 +67,14 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, doubl
 		int contador=1;
 		char name[]="cellsdata.dat";
 		ofstream outfile(name, ios::app);
-		outfile << espectre << " ";
+		outfile << espectre << " "; //Guarda en el archivo cellsdata.dat en la primera entrada el número de estados energéticos accesibles
 		for (int i=0; i<espectre; ++i){
 			outfile << contador  << " ";
-			contador=contador+1;
+			contador=contador+1;  // Guarda cada uno de los estados accesibles sobre la primera fila
 		}
-		//cout << particlespercell << endl;
-		outfile << particlespercell << endl;
+		//cout << particlespercell << endl; 
+		outfile << particlespercell << " "; // Guarda el número de partículas por celda (o el potencial químico) de las celdas en equilibrio.
+		outfile << energypercell << endl; // Guarda la temperatura de las celdas en el equilibrio (o la energía).
 		vectorcells.resize(static_cast<int>(xdimension));
 		for (int i=0; i<static_cast<int>(xdimension); ++i){
 			vectorcells[i].resize(static_cast<int>(ydimension));
