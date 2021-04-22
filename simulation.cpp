@@ -15,7 +15,7 @@ Particletype::Particletype(){ // constructor sin valores
 Particletype::Particletype(int times1){ // constructor con valores
 	times=times1;
 }
-int Particletype::Openfileandsavedata() { // como guardar los datos
+int Particletype::Openfileandsavedata(string infiledata) { // como guardar los datos
 	string line;
 	totalcells=0;
 	totallines=-1;
@@ -23,7 +23,7 @@ int Particletype::Openfileandsavedata() { // como guardar los datos
 	alpha=1.0;
 	
 	ifstream inFile;
-	inFile.open("cellsdata2.dat"); // abre el archivo cellsdata.dat
+	inFile.open(infiledata); // abre el archivo cellsdata.dat
 	if (!inFile) {
 		cout << "Unable to open file" << endl;
 		return EXIT_FAILURE;
