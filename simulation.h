@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 using std::string;
-using namespace std;
+using std::vector;
 class Beginsimulation {
 public:
 	Beginsimulation();
@@ -18,15 +18,15 @@ class Particletype : public Beginsimulation {
 		int Sortdata();
 		int Simulation(int, int);
 		int Exportdata();
-		std::vector<vector<vector<vector<double> > > > matrixinfo;
-		std::vector<vector<double> > info;
-		std::vector<vector<double> > particles;
-		std::vector<vector<vector<vector<double> > > > matrixparticles;
-		std::vector<vector<vector<vector<vector<double> > > > > matrixsimulation;
-		std::vector<double> restrictionsuma;
-		std::vector<double> restrictionenergysuma;
-		std::vector<double> vectorenergyspectre;
-		std::vector<double> vectorsign;
+		vector<vector<vector<vector<double> > > > matrixinfo;
+		vector<vector<double> > info;
+		vector<vector<double> > particles;
+		vector<vector<vector<vector<double> > > > matrixparticles;
+		vector<vector<vector<vector<vector<double> > > > > matrixsimulation;
+		vector<double> restrictionsuma;
+		vector<double> restrictionenergysuma;
+		vector<double> vectorenergyspectre;
+		vector<double> vectorsign;
 };
 class Help {
 public: 

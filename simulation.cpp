@@ -23,7 +23,7 @@ int Particletype::Openfileandsavedata() { // como guardar los datos
 	alpha=1.0;
 	
 	ifstream inFile;
-	inFile.open("cellsdata1.dat"); // abre el archivo cellsdata.dat
+	inFile.open("cellsdata2.dat"); // abre el archivo cellsdata.dat
 	if (!inFile) {
 		cout << "Unable to open file" << endl;
 		return EXIT_FAILURE;
@@ -240,12 +240,15 @@ int Particletype::Sortdata() {
 }
 int Particletype::Simulation(int times, int functionform){
 	cout << "times= " << times << endl;
-	//cout << "times es una variable tipo " << typeid(times).name() << endl;
+	cout << "times es una variable tipo " << typeid(times).name() << endl;
+	cout << "xdimension= " << xdimension << endl;
+	cout << "matrixsimulation.resize " << matrixsimulation.size() << endl << std::flush;
 	matrixsimulation.resize(times);
-	cout << "hola1" << endl;
+	cout << "hola1" << endl << std::flush;
 	for (int i=0; i<times; ++i){
 		matrixsimulation[i].resize(xdimension);
 	}
+	cout << "hola2 " << endl << std::flush;
 	for (int i=0; i<times; ++i){
 		for (int j=0; j<xdimension; ++j){
 			matrixsimulation[i][j].resize(ydimension);
