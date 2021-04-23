@@ -33,9 +33,11 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	}
 	totalcells=totallines-1; 
 	cout << "The total number of cells is: " << totalcells << endl;
-	info.resize(totallines); // se arma la matriz info donde guardaremos la información del archivo
-	for (int i=0; i<totallines; ++i){
-		info[i].resize(5);
+	info.resize(totallines-1);
+	info1.resize(totallines-1); // se arma la matriz info donde guardaremos la información del archivo
+	for (int i=0; i<totallines-1; ++i){
+		info[i].resize(2);
+		info1[i].resize(3);
 	}
 	inFile.clear();
 	inFile.seekg(0);
@@ -44,13 +46,21 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	for (int i=0; i<energyspectre; ++i){
 		inFile >> vectorenergyspectre[i]; 
 	}
+	//cout << "funciona" << endl;
 	particlespercell=0;
 	energypercell=0.0;
 	inFile >> particlespercell;
 	inFile >> energypercell1;
 	totalparticles=totalcells*particlespercell;
-	for (int i=0; i<totallines; ++i){
-		inFile >> info[i][0] >> info[i][1] >> info[i][2] >> info[i][3] >> info[i][4];
+	inFile >> xdimension;
+	inFile >> ydimension;
+	inFile >> zdimension;
+	inFile >> cero1;
+	inFile >> cero2;
+	for (int i=0; i<totallines-1; ++i){
+		//inFile >> info[i][0] >> info[i][1] >> info[i][2] >> info[i][3] >> info[i][4];
+		inFile >> info[i][0] >> info[i][1] >> info1[i][0] >> info1[i][1] >> info1[i][2];
+		//cout << info[i][0] << info1[i][0]<<endl;
 	} // se guarda la información en la matriz info
 	inFile.close();
 	//for (int i=0; i<totallines; ++i){
@@ -58,6 +68,11 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	//		cout << "info["<< i << "]["<< j << "]= " << info[i][j] << endl;
 	//	}
 	//}
+	for (int i=0; i<totallines-1; ++i){
+		cout << "info["<< i << "]["<< 0 << "]= " << info[i][0] <<  "      " << "info[" << i << "][" << 1 << "]= " << info[i][1] << "      " << "info1[" << i << "][" << 0 << "]= " << info1[i][0] << "      " << "info1[" << i << "][" << 1 << "]= " << info1[i][1] << "      " << "info1[" << i << "][" << 2 << "]= " << info1[i][2] << endl;
+	}
+	
+
 	for (int i=0; i<energyspectre; ++i){
 		cout << "vectorenergyspectre[" << i << "]= " << vectorenergyspectre[i] << endl;
 	}	
@@ -91,9 +106,9 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	return 0;
 }
 int Particletype::Sortdata() {
-	xdimension=info[0][0]; //definimos las dimensiones de cada eje que tiene el archivo .dar
-	ydimension=info[0][1];
-	zdimension=info[0][2];
+	//xdimension=info[0][0]; //definimos las dimensiones de cada eje que tiene el archivo .dar
+	//ydimension=info[0][1];
+	//zdimension=info[0][2];
 	cout << "xd= " << xdimension << endl;
 	cout << "yd= " << ydimension << endl;
 	cout << "zd= " << zdimension << endl;
@@ -115,11 +130,14 @@ int Particletype::Sortdata() {
 		}
 	}
 	totalenergy=0.0;
-	for (int i=1; i<totallines; ++i){
+	for (int i=0; i<totallines-1; ++i){
 		totalenergy=totalenergy+info[i][1];
-		matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]=info[i][0];
-		matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1]=info[i][1];
-		matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][4]=0.0;
+		//**matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][0]=info[i][0];
+		matrixinfo[info1[i][0]-1][info1[i][1]-1][info1[i][2]-1][0]=info[i][0];
+		//**matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][1]=info[i][1];
+		matrixinfo[info1[i][0]-1][info1[i][1]-1][info1[i][2]-1][1]=info[i][1];
+		//**matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][4]=0.0;
+		matrixinfo[info1[i][0]-1][info1[i][1]-1][info1[i][2]-1][4]=0.0;
 		//if (static_cast<int>(info[i][2])-1 == 0 or static_cast<int>(info[i][2])-1 == xdimension-1){
 			//matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][2]-=1;
 		//}
@@ -145,8 +163,8 @@ int Particletype::Sortdata() {
 	//particlespercell=totalparticles/totalcells;
 	cout << "todo bien hasta aquí" << endl;	
 	vectorsign.resize(totallines-1);
-	for (int i=1; i<totallines; ++i){
-		matrixinfo[static_cast<int>(info[i][2])-1][static_cast<int>(info[i][3])-1][static_cast<int>(info[i][4])-1][2]=particlespercell-info[i][0]-energypercell1+info[i][1];
+	for (int i=0; i<totallines-1; ++i){
+		matrixinfo[info1[i][0]-1][info1[i][1]-1][info1[i][2]-1][2]=particlespercell-info[i][0]-energypercell1+info[i][1];
 		vectorsign[i]=particlespercell-info[i][0]-energypercell1+info[i][1];
 		cout << "vectorsign[" << i << "]= " << vectorsign[i] << endl;
 	}
@@ -294,14 +312,15 @@ int Particletype::Simulation(int times, int functionform){
 	//cout << "matrixinfo[0][0][0][2]= " << matrixinfo[0][0][0][2] << endl;
 	if (functionform==0){ //Exponencial
 		for (int i=0; i<times; ++i){
-			for (int j=1; j<totallines; ++j){
+			for (int j=0; j<totallines-1; ++j){
 				//if ((particlespercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1])<0){
 				//if (matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][2]<0){
 				if (vectorsign[j]<0){
 			//matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=-exp(((particlespercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]))*time);
-			matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=-exp((matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][2])*time);
+			//**matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=-exp((matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][2])*time);
+			matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=-exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i);
 					for (int k=0; k<energyspectre; ++k){
-						matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]=matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]-exp((matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][2])*time)*vectorenergyspectre[k];
+						matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
 					}
 				}
 				//if ((particlespercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1])>0){
@@ -309,19 +328,19 @@ int Particletype::Simulation(int times, int functionform){
 				if (vectorsign[j]>0){
 
 					//matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=exp(-((particlespercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]))*time);
-					matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=exp(-(matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][2])-1][4])*time);
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][4])*i);
 					for (int k=0; k<energyspectre; ++k){			
 						//matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]=matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]+(exp(-((particlespercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]))*time))*vectorenergyspectre[k];
-						matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]=matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]+exp(-(matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][2])*time)*vectorenergyspectre[k];
+						matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
 					}
 				}
 				//if ((particlespercell-matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0])+alpha*(energypercell-matrixinfo[static_cast<int>(info[j][2]-1)][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1])==0){
 				//if (matrixinfo[static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][2]==0){
 				if (vectorsign[j]==0){
-			matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0]=0.0;
+			matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=0.0;
 				}
-				restrictionsuma[i]=restrictionsuma[i]+matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0];
-				restrictionenergysuma[i]=restrictionenergysuma[i]+matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1];
+				restrictionsuma[i]=restrictionsuma[i]+matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0];
+				restrictionenergysuma[i]=restrictionenergysuma[i]+matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1];
 			}
 			time=time+1.0;
 		}
@@ -377,8 +396,8 @@ int Particletype::Exportdata(){
 	//outfile << "R"i"_particles" << " " << "R"i"_energy" << endl;
 	for (int i=0; i<times; ++i){
 		outfile << i << " ";
-		for (int j=1; j<totallines; ++j){
-			outfile << matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][0] << " " << matrixsimulation[i][static_cast<int>(info[j][2])-1][static_cast<int>(info[j][3])-1][static_cast<int>(info[j][4])-1][1]<< " ";
+		for (int j=0; j<totallines-1; ++j){
+			outfile << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0] << " " << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]<< " ";
 		}
 		//outfile << restrictionsuma[i] << " " << restrictionenergysuma[i] << endl;
 		outfile << endl;

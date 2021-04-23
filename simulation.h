@@ -21,6 +21,7 @@ class Particletype : public Beginsimulation {
 		int Exportdata();
 		vector<vector<vector<vector<double> > > > matrixinfo;
 		vector<vector<double> > info;
+		vector<vector<int> > info1;
 		vector<vector<double> > particles;
 		vector<vector<vector<vector<double> > > > matrixparticles;
 		vector<vector<vector<vector<vector<double> > > > > matrixsimulation;
