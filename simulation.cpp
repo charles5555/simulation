@@ -207,7 +207,7 @@ int Particletype::Sortdata() {
 					matrixinfo[i][j][k][4]=matrixinfo[i][j][k][4]+1;
 					//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << " subió uno en x porque i no alcanzó el máximo" << endl;	
 				}
-				//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][2] << endl;
+				cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 2 << "]= " << matrixinfo[i][j][k][2] << endl;
 				//cout << "termina ciclo en k" << endl;
 			}
 		}
