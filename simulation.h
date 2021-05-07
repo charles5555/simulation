@@ -7,7 +7,7 @@ using std::vector;
 class Beginsimulation {
 public:
 	Beginsimulation();
-	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform, particlespercell;
+	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform, particlespercell, meantemperature;
 	double alpha, time, coef, t0, energypercell, energyspectre, totalenergy, energypercell1;
 	string infiledata;
 };
