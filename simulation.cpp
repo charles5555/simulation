@@ -35,10 +35,12 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	totalcells=totallines-1; 
 	cout << "The total number of cells is: " << totalcells << endl;
 	info.resize(totallines-1);
+	potentialenergy.resize(totallines-1);
 	info1.resize(totallines-1); // se arma la matriz info donde guardaremos la información del archivo
 	for (int i=0; i<totallines-1; ++i){
-		info[i].resize(2);
-		info1[i].resize(3);
+		info[i].resize(2);// este vector lleva la información del número de partículas y la energía de la celda
+		info1[i].resize(3);// este vector lleva la información de las entradas de la celda en los ejes coordenados
+		potentialenergy[i].resize(2); // este vector lleva la información de la temperatura y el potencial químico de las celdas
 	}
 	inFile.clear();
 	inFile.seekg(0);
@@ -50,9 +52,10 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	//cout << "funciona" << endl;
 	particlespercell=0;
 	energypercell=0.0;
-	inFile >> particlespercell;
-	inFile >> energypercell1;
-	inFile >> meantemperature;
+	inFile >> particlespercell;// partículas de las celdas en equilibrio
+	inFile >> energypercell1; // energía de las celdas en equilibrio
+	inFile >> meantemperature;// temperatura de las celdas en equilibrio
+	inFile >> meanpotential; // potencial químico de las celdas en equilibrio
 	totalparticles=totalcells*particlespercell;
 	inFile >> xdimension;
 	inFile >> ydimension;
@@ -61,13 +64,13 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	inFile >> cero2;
 	for (int i=0; i<totallines-1; ++i){
 		//inFile >> info[i][0] >> info[i][1] >> info[i][2] >> info[i][3] >> info[i][4];
-		inFile >> info[i][0] >> info[i][1] >> info1[i][0] >> info1[i][1] >> info1[i][2];
+		inFile >> info[i][0] >> info[i][1] >> potentialenergy[i][0] >> potentialenergy[i][1] >> info1[i][0] >> info1[i][1] >> info1[i][2];
 		//cout << info[i][0] << info1[i][0]<<endl;
 	} // se guarda la información en la matriz info
 	inFile.close();
 	//for (int i=0; i<totallines; ++i){
-	//	for (int j=0; j<5; ++j){
-	//		cout << "info["<< i << "]["<< j << "]= " << info[i][j] << endl;
+	//	for (int j=0; j<2; ++j){
+	//		cout << "potentialenergy["<< i << "]["<< j << "]= " << potentialenergy[i][j] << endl;
 	//	}
 	//}
 	for (int i=0; i<totallines-1; ++i){
