@@ -1,5 +1,5 @@
-G=g++ -std=c++11
-F=g++
+G=g++ -pedantic -std=c++11
+F=g++ -pedantic
 
 all: test
 
