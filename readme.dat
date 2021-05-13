@@ -1,9 +1,9 @@
 El archivo con extensión cellsdata.dat, para que lo lea el simulador debe estar ordenado de la siguiente manera:
-1.- En la primera entrada de la primera fila, tendremos el número de estados energéticos accesibles como número entero, las siguientes entradas de esa fila corresponden a las energías de esos estados accesibles como flotantes, en la penúltima entrada de esa fila tendremos el número total de partículas por celda en el equilibrio (o el potencial químico) y finalmente en la última tenemos la temperatura (o la energía) de las celdas en equilibrio.
+1.- En la primera entrada de la primera fila, tendremos el número de estados energéticos accesibles como número entero, las siguientes entradas de esa fila corresponden a las energías de esos estados accesibles como flotantes, en la siguiente entrada de esa fila tendremos el número total de partículas por celda en el equilibrio seguida de la energía de las celdas en equilibrio, después tenemos la temperatura de las celdas en equilibrio y finalmente el potencial químico de las celdas en equilibrio.
 2.- De la segunda fila en adelante, el archivo contendrá 5 columnas separadas por un espacio entre ellas, cada entrada será de flotantes.
 3.- De la primera línea, el primer elemento corresponde a la dimensión en el eje x, el segundo elemento a la dimensión en el eje y y el tercero a la dimensión en el eje z.
 4.- Los otros dos elementos sobrantes en la primera linea vienen predeterminados como ceros pero no son útiles para la simulación.
-5.- De la segunda fila en adelante, el primer elemento indica el potencial químico de la celda, el segundo elemento indica la energía de la celda (temperatura) "a considerar", los últimos 3 eleméntos indican en qué posición se encuentra dicha celda (x,y,z).
+5.- De la segunda fila en adelante, el primer elemento indica el número de partículas de la celda, el segundo elemento indica la energía de la celda "a considerar", seguido de la temperatura y el potencial químico de la celda y los últimos 3 eleméntos indican en qué posición se encuentra dicha celda (x,y,z).
 
 El archivo particlesdata.dat estará ordenado de la siguiente forma:
 1.- El archivo contiene 5 columnas.

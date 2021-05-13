@@ -6,14 +6,14 @@ using std::string;
 using namespace std;
 class Randomgenerationdata {
 public: Randomgenerationdata();
-	int particlespercell, energypercell, randomnumint, numberespectre, espectre;
-	double xdimension, ydimension, zdimension, randomnumdouble;
+	int particlespercell, energypercell, randomnumint, numberespectre, espectre, xdimension, ydimension, zdimension;
+	double randomnumdouble;
 };
 class Particletype : public Randomgenerationdata {
 	public:
 		Particletype(void);
-		Particletype(int, int, double, double, double, int);
-		int Generationdata(int, int, double, double, double);
+		Particletype(int, int, int, int, int, int);
+		int Generationdata(int, int, int, int, int);
 		int Savedata();
 		std::vector<double> vectorenergylevel;
 		std::vector<vector<vector<double> > > vectorcells;
