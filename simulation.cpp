@@ -166,14 +166,14 @@ int Particletype::Sortdata() {
 	}
 	energypercell=totalenergy/totalcells;
 	//double constboltzmann=1.380649e-23;
-	double constboltzmann=1.0;
-	meantemperature=1;
-	double meanconst=3*(meantemperature);
+	//double constboltzmann=1.0;
+	//meantemperature=1;
+	//double meanconst=3*(meantemperature);
 	//particlespercell=totalparticles/totalcells;
 	cout << "todo bien hasta aquí" << endl;	
 	//vectorsign.resize(totallines-1);
 	for (int i=0; i<totallines-1; ++i){
-		matrixinfo[info1[i][0]-1][info1[i][1]-1][info1[i][2]-1][2]=(particlespercell-info[i][0])-(1/(constboltzmann*meantemperature))*(energypercell1-info[i][1]);
+		matrixinfo[info1[i][0]-1][info1[i][1]-1][info1[i][2]-1][2]=(((meanpotential/meantemperature)*particlespercell)-((potentialenergy[i][1]/potentialenergy[i][0])*info[i][0]))-(((1/meanpotential)*energypercell1)-((1/potentialenergy[i][0])*info[i][1]));
 		//vectorsign[i]=particlespercell-info[i][0]-energypercell1+info[i][1];
 		//cout << "vectorsign[" << i << "]= " << vectorsign[i] << endl;
 	}
@@ -185,34 +185,34 @@ int Particletype::Sortdata() {
 			for (int k=0; k<zdimension; ++k){
 				//cout << "matrix[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << endl;
 				if (k != 0){
-					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(particlespercell-matrixinfo[i][j][k-1][0])-(1/(constboltzmann*meantemperature))*(energypercell1-matrixinfo[i][j][k-1][1]);
+					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(((meanpotential/meantemperature)*particlespercell)-((potentialenergy[i][1]/potentialenergy[i][0])*matrixinfo[i][j][k-1][0]))-(((1/meantemperature)*energypercell1)-((1/potentialenergy[i][0])*matrixinfo[i][j][k-1][1]));
 					matrixinfo[i][j][k][4]=matrixinfo[i][j][k][4]+1;
 					//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << " subió uno porque k es distinto de 0" << endl;
 				}
 				
 				//cout << "matrix[" << i << "][" << j << "][" << k << "][" << 2 << "]= " << matrixinfo[i][j][k][4] << endl;
 				if (k != zdimension-1){
-					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(particlespercell-matrixinfo[i][j][k+1][0])-(1/(constboltzmann*meantemperature))*(energypercell1-matrixinfo[i][j][k+1][1]);
+					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(((meanpotential/meantemperature)*particlespercell)-((potentialenergy[i][1]/potentialenergy[i][0])*matrixinfo[i][j][k+1][0]))-(((1/meantemperature)*energypercell1)-((1/potentialenergy[i][0])*matrixinfo[i][j][k+1][1]));
 					matrixinfo[i][j][k][4]=matrixinfo[i][j][k][4]+1;
 					//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << " subió uno en z porque k no llegó al máximo" << endl;
 				}
 				if (j !=0){
-					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(particlespercell-matrixinfo[i][j-1][k][0])-(1/(constboltzmann*meantemperature))*(energypercell1-matrixinfo[i][j-1][k][1]);
+					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(((meanpotential/meantemperature)*particlespercell)-((potentialenergy[i][1]/potentialenergy[i][0])*matrixinfo[i][j-1][k][0]))-(((1/meantemperature)*energypercell1)-((1/potentialenergy[i][0])*matrixinfo[i][j-1][k][1]));
 					matrixinfo[i][j][k][4]=matrixinfo[i][j][k][4]+1;
 					//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << " subió uno en y porque j=0" << endl;
 				}
 				if (j != ydimension-1){
-					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(particlespercell-matrixinfo[i][j+1][k][0])-(1/(constboltzmann*meantemperature))*(energypercell1-matrixinfo[i][j+1][k][1]);
+					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(((meanpotential/meantemperature)*particlespercell)-((potentialenergy[i][1]/potentialenergy[i][0])*matrixinfo[i][j+1][k][0]))-(((1/meantemperature)*energypercell1)-((1/potentialenergy[i][0])*matrixinfo[i][j+1][k][1]));
 					matrixinfo[i][j][k][4]=matrixinfo[i][j][k][4]+1;
 					//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << " subió uno en y porque j  no alcanzó el máximo" <<  endl;
 				}
 				if (i != 0){
-					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(particlespercell-matrixinfo[i-1][j][k][0])-(1/(constboltzmann*meantemperature))*(energypercell1-matrixinfo[i-1][j][k][1]);
+					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(((meanpotential/meantemperature)*particlespercell)-((potentialenergy[i][1]/potentialenergy[i][0])*matrixinfo[i-1][j][k][0]))-(((1/meantemperature)*energypercell1)-((1/potentialenergy[i][0])*matrixinfo[i-1][j][k][1]));
 					matrixinfo[i][j][k][4]=matrixinfo[i][j][k][4]+1;
 					//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << " subió uno en x porque i=0" << endl;
 				}
 				if (i != xdimension-1){
-					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(particlespercell-matrixinfo[i+1][j][k][0])-(1/(constboltzmann*meantemperature))*(energypercell1-matrixinfo[i+1][j][k][1]);
+					matrixinfo[i][j][k][2]=matrixinfo[i][j][k][2]+(((meanpotential/meantemperature)*particlespercell)-((potentialenergy[i][1]/potentialenergy[i][0])*matrixinfo[i+1][j][k][0]))-(((1/meantemperature)*energypercell1)-((1/potentialenergy[i][0])*matrixinfo[i+1][j][k][1]));
 					matrixinfo[i][j][k][4]=matrixinfo[i][j][k][4]+1;
 					//cout << "matrixinfo[" << i << "][" << j << "][" << k << "][" << 4 << "]= " << matrixinfo[i][j][k][4] << " subió uno en x porque i no alcanzó el máximo" << endl;	
 				}
