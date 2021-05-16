@@ -78,7 +78,7 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, int x
 		double potentialnumber=0.0 ;
 		contador1=contador;
 		for (int i=0; i<espectre; ++i){
-			potentialnumber=potentialnumber+(exp(beta*(particlespercell-(contador1))))/(1+exp(beta*(particlespercell-(contador1))));
+			potentialnumber=round(potentialnumber)+round((exp(beta*(particlespercell-(contador1))))/(1+exp(beta*(particlespercell-(contador1)))));
 			temperatureenergy=temperatureenergy-((particlespercell-(contador1))*exp(beta*(particlespercell-(contador1))))/(1+exp(beta*(particlespercell-(contador1))));
 		contador1=contador1+1;
 		}
@@ -98,11 +98,15 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, int x
 		double particlenumber=0.0;
 		double energynumber=0.0;
 		double beta1;
+		double minpart=particlespercell-1.0;
+		double maxpart=particlespercell+1.0;
+		double minener=energypercell-10.0;
+		double maxener=energypercell+10.0;
 		contador1=contador;
-		constexpr int FLOAT_MIN1 = particlespercell-1;
-		constexpr int FLOAT_MAX1 = particlespercell+1;
-		constexpr int FLOAT_MIN = energypercell-10;
-		constexpr int FLOAT_MAX = energypercell+10;
+		int FLOAT_MIN1 = minpart;
+		int FLOAT_MAX1 = maxpart;
+		int FLOAT_MIN = minener;
+		int FLOAT_MAX = maxener;
 		random_device rd;
 		default_random_engine eng(rd());
 		uniform_real_distribution<float> distr1(FLOAT_MIN1, FLOAT_MAX1);
@@ -118,7 +122,7 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, int x
 					temperature=floor(distr(eng));
 					beta1=1/(boltzmannconstant*temperature);
 					for (int i=0; i<espectre; ++i){
-			particlenumber=particlenumber+(exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1))));
+			particlenumber=round(particlenumber)+round((exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1)))));
 			energynumber=energynumber-((potential-(contador1))*exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1))));
 		contador1=contador1+1;
 		}
@@ -182,10 +186,10 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, int x
 		double energynumber=0.0;
 		double beta1;
 		contador1=contador;
-		constexpr int FLOAT_MIN1 = particlespercell-1;
-		constexpr int FLOAT_MAX1 = particlespercell+1;
-		constexpr int FLOAT_MIN = energypercell-10;
-		constexpr int FLOAT_MAX = energypercell+10;
+		int FLOAT_MIN1 = particlespercell-1;
+		int FLOAT_MAX1 = particlespercell+1;
+		int FLOAT_MIN = energypercell-10;
+		int FLOAT_MAX = energypercell+10;
 		random_device rd;
 		default_random_engine eng(rd());
 		uniform_real_distribution<float> distr1(FLOAT_MIN1, FLOAT_MAX1);

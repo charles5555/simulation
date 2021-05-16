@@ -292,7 +292,7 @@ int Particletype::Simulation(int times, int functionform){
 		for (int j=0; j<xdimension; ++j){
 			for (int k=0; k<ydimension; ++k){
 				for (int l=0; l<zdimension; ++l){
-					matrixsimulation[i][j][k][l].resize(2);
+					matrixsimulation[i][j][k][l].resize(3);
 				}
 			}
 		}
@@ -325,6 +325,7 @@ int Particletype::Simulation(int times, int functionform){
 				//if (particlespercell-info[j][0]>0 && energypercell1-info[j][1]>0){
 				if (matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]>0){
 					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i);
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=floor((particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i));
 					if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]>0){
 						for (int k=0; k<energyspectre; ++k){
 							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
@@ -349,6 +350,7 @@ int Particletype::Simulation(int times, int functionform){
 				//if (particlespercell-info[j][0]<0 && energypercell1-info[j][1]<0){
 				if (matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]<0){
 					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i);
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=floor((particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i));
 					if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]>0){
 						for (int k=0; k<energyspectre; ++k){			
 							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
@@ -371,7 +373,9 @@ int Particletype::Simulation(int times, int functionform){
 					}
 				}	
 				if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]==0){
-			matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=0.0;
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=0.0;
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=0.0;
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=0.0;
 				}
 				if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]>0){
 					cout << "las particulas están en equilibrio" << endl;
@@ -397,7 +401,7 @@ int Particletype::Simulation(int times, int functionform){
 				//	cout << "las partículas y la energía no tienen el mismo signo" << endl;
 				//	return EXIT_FAILURE;
 				//}
-				restrictionsuma[i]=restrictionsuma[i]+matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0];
+				restrictionsuma[i]=round(restrictionsuma[i])+round(matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]);
 				restrictionenergysuma[i]=restrictionenergysuma[i]+matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1];
 			}
 			time=time+1.0;
