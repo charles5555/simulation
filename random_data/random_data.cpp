@@ -15,7 +15,7 @@ Randomgenerationdata::Randomgenerationdata(){
  cout << "the program is starting" << endl;
 }
 Particletype::Particletype(){
-	particlespercell=1000; //potencial químico de las celdas en equilibrio
+	particlespercell=1000.0; //potencial químico de las celdas en equilibrio
 	energypercell=40; //temperatura de las celdas en equilibrio
 	xdimension=3;
 	ydimension=3;
@@ -25,15 +25,15 @@ Particletype::Particletype(){
 	cout << "Energía por celda en el equilibrio = " << energypercell << endl;
 	cout << "La malla tridimensional tendra una dimensión de " << xdimension << "X" << ydimension << "X" << zdimension << endl;
 }
-Particletype::Particletype(int particlespercell, int energypercell, int xdimension, int ydimension, int zdimension, int numberespectre){
+Particletype::Particletype(double particlespercell, int energypercell, int xdimension, int ydimension, int zdimension, int numberespectre){
 	cout << "Se ha introducido los valores que se requieren" << endl;
 	cout << "Potencial químico por celda en equilibrio= " << particlespercell << endl;
 	cout << "Temperatura por celda en el equilibrio= " << energypercell << endl;
 	cout << "La malla tridimensional tendra una dimensión de " << xdimension << "X" << ydimension << "X" << zdimension << endl;
 }
-int Particletype::Generationdata(int particlespercell, int numberespectre, int xdimension, int ydimension, int zdimension) {
+int Particletype::Generationdata(double particlespercell, int energypercell, int numberespectre, int xdimension, int ydimension, int zdimension) {
 	//Generador de un número aleatorio entero.
-	cout << particlespercell << endl;
+	cout << energypercell << endl;
 	srand(time(NULL));
 	randomnumint = 1+rand()%(101-1); 
 	cout << "El numero aleatorio entero generado es = " << randomnumint << endl;
@@ -78,7 +78,8 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, int x
 		double potentialnumber=0.0 ;
 		contador1=contador;
 		for (int i=0; i<espectre; ++i){
-			potentialnumber=round(potentialnumber)+round((exp(beta*(particlespercell-(contador1))))/(1+exp(beta*(particlespercell-(contador1)))));
+			//potentialnumber=round(potentialnumber)+round((exp(beta*(particlespercell-(contador1))))/(1+exp(beta*(particlespercell-(contador1)))));
+			potentialnumber=round(potentialnumber)+round(1/(1+exp(beta*(-particlespercell+(contador1)))));
 			temperatureenergy=temperatureenergy-((particlespercell-(contador1))*exp(beta*(particlespercell-(contador1))))/(1+exp(beta*(particlespercell-(contador1))));
 		contador1=contador1+1;
 		}
@@ -164,8 +165,10 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, int x
 		double temperatureenergy=0.0 ;
 		double potentialnumber=0.0 ;
 		contador1=contador;
+		cout << energypercell;
 		for (int i=0; i<espectre; ++i){
-			potentialnumber=potentialnumber+(exp(beta*(particlespercell-(contador1))))/(1-exp(beta*(particlespercell-(contador1))));
+			//potentialnumber=potentialnumber+(exp(beta*(particlespercell-(contador1))))/(1-exp(beta*(particlespercell-(contador1))));
+			potentialnumber=potentialnumber+(1/(-1+exp(beta*(-particlespercell+(contador1)))));
 			temperatureenergy=temperatureenergy-((particlespercell-(contador1))*exp(beta*(particlespercell-(contador1))))/(1-exp(beta*(particlespercell-(contador1))));
 		contador1=contador1+1;
 		}
@@ -201,11 +204,11 @@ int Particletype::Generationdata(int particlespercell, int numberespectre, int x
 		for (int i=0; i<xdimension; ++i){
 			for (int j=0; j<ydimension; ++j){
 				for (int k=0; k<zdimension; ++k){
-					potential=floor(distr1(eng));
-					temperature=floor(distr(eng));
+					potential=distr1(eng);
+					temperature=distr(eng);
 					beta1=1/(boltzmannconstant*temperature);
 					for (int i=0; i<espectre; ++i){
-			particlenumber=particlenumber+(exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1))));
+			particlenumber=round(particlenumber)+round((exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1)))));
 			energynumber=energynumber-((potential-(contador1))*exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1))));
 		contador1=contador1+1;
 		}

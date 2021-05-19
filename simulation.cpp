@@ -330,7 +330,7 @@ int Particletype::Simulation(int times, int functionform){
 				//if (particlespercell-info[j][0]>0 && energypercell1-info[j][1]>0){
 				if (matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]>0){
 					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i);
-					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=floor((particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i));
+					//matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=floor((particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i));
 					if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]>0){
 						for (int k=0; k<energyspectre; ++k){
 							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
