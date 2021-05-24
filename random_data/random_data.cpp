@@ -15,8 +15,8 @@ Randomgenerationdata::Randomgenerationdata(){
  cout << "the program is starting" << endl;
 }
 Particletype::Particletype(){
-	particlespercell=1000.0; //potencial químico de las celdas en equilibrio
-	energypercell=40; //temperatura de las celdas en equilibrio
+	particlespercell=45.0; //potencial químico de las celdas en equilibrio adimensional
+	energypercell=300; //temperatura de las celdas en equilibrio
 	xdimension=3;
 	ydimension=3;
 	zdimension=3;
@@ -150,7 +150,7 @@ int Particletype::Generationdata(double particlespercell, int energypercell, int
 		}
 		int contador;
 		cout << "Introduzca desde qué valor quiere empezar los niveles energéticos (iran de uno en uno aumentando su valor) " << endl;
-		cin >> contador;
+		cin >> contador; // Corresponde al valor de la energía de los estados energéticos adimensionales (E/KT)
 		int contador1=contador;
 		char name[]="cellsdata.dat";
 		ofstream outfile(name, ios::app);
@@ -160,19 +160,21 @@ int Particletype::Generationdata(double particlespercell, int energypercell, int
 			contador1=contador1+1;  // Guarda cada uno de los estados accesibles sobre la primera fila
 		}
 		//cout << particlespercell << endl; 
-		double boltzmannconstant=8.6173e-5;
-		double beta=1/(boltzmannconstant*energypercell);
+		//double boltzmannconstant=8.6173e-5;
+		//double beta=1/(boltzmannconstant*energypercell);
 		double temperatureenergy=0.0 ;
 		double potentialnumber=0.0 ;
+		totalparticles=0;
+		totalenergy=0;
 		contador1=contador;
 		cout << energypercell;
-		for (int i=0; i<espectre; ++i){
+		//for (int i=0; i<espectre; ++i){
 			//potentialnumber=potentialnumber+(exp(beta*(particlespercell-(contador1))))/(1-exp(beta*(particlespercell-(contador1))));
-			potentialnumber=potentialnumber+(1/(-1+exp(beta*(-particlespercell+(contador1)))));
-			temperatureenergy=temperatureenergy-((particlespercell-(contador1))*exp(beta*(particlespercell-(contador1))))/(1-exp(beta*(particlespercell-(contador1))));
-		contador1=contador1+1;
-		}
-		outfile << potentialnumber << " " << temperatureenergy << " " << energypercell << " " << particlespercell << endl; // Guarda el número de partículas en equilibrio, la energía en equilibrio, la temperatura de la celda y el potencial químico de la celda.
+			//potentialnumber=round(potentialnumber)+round((1/(-1+exp(-particlespercell+(contador1)))));
+			//temperatureenergy=temperatureenergy+(contador1/(-1+exp(-particlespercell+contador1)));
+			//contador1=contador1+1;
+		//}
+		//outfile << potentialnumber << " " << temperatureenergy << " " << energypercell << " " << particlespercell << endl; // Guarda el número de partículas en equilibrio, la energía en equilibrio, la temperatura de la celda y el potencial químico de la celda.
 		//vectorcells.resize(xdimension);
 		//for (int i=0; i<xdimension; ++i){
 		//	vectorcells[i].resize(ydimension);
@@ -182,13 +184,13 @@ int Particletype::Generationdata(double particlespercell, int energypercell, int
 		//		vectorcells[i][j].resize(zdimension);
 		//	}
 		//}
-		outfile << xdimension << " " << ydimension << " " << zdimension << " " << 0 << " " << 0 << endl;
-		double potential;
-		double temperature;
-		double particlenumber=0.0;
-		double energynumber=0.0;
-		double beta1;
-		contador1=contador;
+		//outfile << xdimension << " " << ydimension << " " << zdimension << " " << 0 << " " << 0 << endl;
+		//double potential;
+		//double temperature;
+		//double particlenumber=0.0;
+		//double energynumber=0.0;
+		//double beta1;
+		//contador1=contador;
 		int FLOAT_MIN1 = particlespercell-1;
 		int FLOAT_MAX1 = particlespercell+1;
 		int FLOAT_MIN = energypercell-10;
@@ -206,9 +208,9 @@ int Particletype::Generationdata(double particlespercell, int energypercell, int
 				for (int k=0; k<zdimension; ++k){
 					potential=distr1(eng);
 					temperature=distr(eng);
-					beta1=1/(boltzmannconstant*temperature);
+					//beta1=1/(boltzmannconstant*temperature);
 					for (int i=0; i<espectre; ++i){
-			particlenumber=round(particlenumber)+round((exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1)))));
+			particlenumber=round(particlenumber)+round(1/(-1+exp(())));
 			energynumber=energynumber-((potential-(contador1))*exp(beta1*(potential-(contador1))))/(1-exp(beta1*(potential-(contador1))));
 		contador1=contador1+1;
 		}

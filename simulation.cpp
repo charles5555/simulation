@@ -73,9 +73,9 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 	//		cout << "potentialenergy["<< i << "]["<< j << "]= " << potentialenergy[i][j] << endl;
 	//	}
 	//}
-	for (int i=0; i<totallines-1; ++i){
-		cout << "info["<< i << "]["<< 0 << "]= " << info[i][0] <<  "      " << "info[" << i << "][" << 1 << "]= " << info[i][1] << "      " << "info1[" << i << "][" << 0 << "]= " << info1[i][0] << "      " << "info1[" << i << "][" << 1 << "]= " << info1[i][1] << "      " << "info1[" << i << "][" << 2 << "]= " << info1[i][2] << endl;
-	}
+	//for (int i=0; i<totallines-1; ++i){
+		//cout << "info["<< i << "]["<< 0 << "]= " << info[i][0] <<  "      " << "info[" << i << "][" << 1 << "]= " << info[i][1] << "      " << "info1[" << i << "][" << 0 << "]= " << info1[i][0] << "      " << "info1[" << i << "][" << 1 << "]= " << info1[i][1] << "      " << "info1[" << i << "][" << 2 << "]= " << info1[i][2] << endl;
+	//}
 	
 
 	for (int i=0; i<energyspectre; ++i){
@@ -306,7 +306,7 @@ int Particletype::Simulation(int times, int functionform){
 		for (int j=0; j<xdimension; ++j){
 			for (int k=0; k<ydimension; ++k){
 				for (int l=0; l<zdimension; ++l){
-					matrixsimulation[i][j][k][l].resize(3);
+					matrixsimulation[i][j][k][l].resize(4);
 				}
 			}
 		}
@@ -316,6 +316,8 @@ int Particletype::Simulation(int times, int functionform){
 	//particlespercell=totalparticles/totalcells;
 	restrictionenergysuma.resize(times);
 	restrictionsuma.resize(times);
+	double timereference=0.0001;
+	cout << energypercell1 << endl;
 	cout << "times = " << times << endl;
 	//for (int i=0; i<times; ++i){
 	//	for (int j=0; j<xdimension; ++j){
@@ -338,75 +340,82 @@ int Particletype::Simulation(int times, int functionform){
 			for (int j=0; j<totallines-1; ++j){
 				//if (particlespercell-info[j][0]>0 && energypercell1-info[j][1]>0){
 				if (matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]>0){
-					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i);
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=round((particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i));
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i);
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][3]=(energypercell-info[j][1])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i);
+					cout << "matrixsimulation[][][][][3]= " << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2] << endl;
 					//matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=floor((particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i));
-					if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]>0){
-						for (int k=0; k<energyspectre; ++k){
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
-					if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]<0){
-						for (int k=0; k<energyspectre; ++k){
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
-					if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]>0){
-						for (int k=0; k<energyspectre; ++k){
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
-					if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]<0){
-						for (int k=0; k<energyspectre; ++k){
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
+					//if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]>0){
+					//	for (int k=0; k<energyspectre; ++k){
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
+					//if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]<0){
+					//	for (int k=0; k<energyspectre; ++k){
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
+					//if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]>0){
+					//	for (int k=0; k<energyspectre; ++k){
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
+					//if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]<0){
+					//	for (int k=0; k<energyspectre; ++k){
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp(-(matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
 				}
 				//if (particlespercell-info[j][0]<0 && energypercell1-info[j][1]<0){
 				if (matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]<0){
-					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i);
-					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=floor((particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i));
-					if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]>0){
-						for (int k=0; k<energyspectre; ++k){			
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
-					if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]<0){
-						for (int k=0; k<energyspectre; ++k){			
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
-					if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]>0){
-						for (int k=0; k<energyspectre; ++k){			
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
-					if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]<0){
-						for (int k=0; k<energyspectre; ++k){			
-							matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*i)*vectorenergyspectre[k];
-						}
-					}
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=round((particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i));
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i);
+					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][3]=(energypercell1-info[j][1])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i);
+					cout << "matrixsimulation[][][][][3]= " << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][3] << endl;
+
+
+					//if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]>0){
+					//	for (int k=0; k<energyspectre; ++k){			
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
+					//if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]<0){
+					//	for (int k=0; k<energyspectre; ++k){			
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]+(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
+					//if (energypercell1-info[j][1]<0 & particlespercell-info[j][0]>0){
+					//	for (int k=0; k<energyspectre; ++k){			
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
+					//if (energypercell1-info[j][1]>0 & particlespercell-info[j][0]<0){
+					//	for (int k=0; k<energyspectre; ++k){			
+					//		matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]-(particlespercell-info[j][0])*exp((matrixinfo[info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2])*(timereference)*i)*vectorenergyspectre[k];
+					//	}
+					//}
 				}	
-				if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]==0){
-					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=0.0;
-					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=0.0;
-					matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=0.0;
-				}
-				if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]>0){
-					cout << "las particulas están en equilibrio" << endl;
-					return EXIT_FAILURE;
-				}
-				if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]<0){
-					cout << "las particulas están en equilibrio" << endl;
-					return EXIT_FAILURE;
-				}
-				if (particlespercell-info[j][0]>0 && energypercell1-info[j][1]==0){
-					cout << "la energía está en equilibrio" << endl;
-					return EXIT_FAILURE;
-				}
-				if (particlespercell-info[j][0]<0 && energypercell1-info[j][1]==0){
-					cout << "la energía está en equilibrio" << endl;
-					return EXIT_FAILURE;
-				}
+				//if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]==0){
+				//	matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]=0.0;
+				//	matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]=0.0;
+				//	matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]=0.0;
+				//}
+				//if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]>0){
+				//	cout << "las particulas están en equilibrio" << endl;
+				//	return EXIT_FAILURE;
+				//}
+				//if (particlespercell-info[j][0]==0 && energypercell1-info[j][1]<0){
+				//	cout << "las particulas están en equilibrio" << endl;
+				//	return EXIT_FAILURE;
+				//}
+				//if (particlespercell-info[j][0]>0 && energypercell1-info[j][1]==0){
+				//	cout << "la energía está en equilibrio" << endl;
+				//	return EXIT_FAILURE;
+				//}
+				//if (particlespercell-info[j][0]<0 && energypercell1-info[j][1]==0){
+				//	cout << "la energía está en equilibrio" << endl;
+				//	return EXIT_FAILURE;
+				//}
 				//if (particlespercell-info[j][0]>0 && energypercell1-info[j][1]<0){
 				//	cout << "las partículas y la energía no tienen el mismo signo" << endl;
 				//	return EXIT_FAILURE;
@@ -489,6 +498,7 @@ int Particletype::Simulation(int times, int functionform){
 	return 0;
 }
 int Particletype::Exportdata(){
+	cout << "vamos a imprimir datos" << endl;
 	char name[]="outputdata.dat";
 	ofstream outfile(name, ios::app);
 	//for (int i=0; i<times; ++i){
@@ -504,7 +514,7 @@ int Particletype::Exportdata(){
 	for (int i=0; i<times; ++i){
 		outfile << i << " ";
 		for (int j=0; j<totallines-1; ++j){
-			outfile << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0] << " " << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][1]<< " ";
+			outfile << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][0]  << " " << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][2]<< " " << matrixsimulation[i][info1[j][0]-1][info1[j][1]-1][info1[j][2]-1][3]<< " ";
 		}
 		//outfile << restrictionsuma[i] << " " << restrictionenergysuma[i] << endl;
 		outfile << endl;
@@ -514,7 +524,7 @@ int Particletype::Exportdata(){
 	char name1[]="restrictionsdata.dat";
 	ofstream outfile1(name1, ios::app);
 	for (int i=0; i<times; ++i){
-		outfile1 << i << " " << restrictionsuma[i] << " " << restrictionenergysuma[i] << endl;
+		outfile1 << i << " " << restrictionsuma[i] << endl; //" " << restrictionenergysuma[i] << endl;
 	}
 	outfile1.close();
 	return 0;

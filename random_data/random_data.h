@@ -6,8 +6,8 @@ using std::string;
 using namespace std;
 class Randomgenerationdata {
 public: Randomgenerationdata();
-	int energypercell, randomnumint, numberespectre, espectre, xdimension, ydimension, zdimension;
-	double randomnumdouble, particlespercell;
+	int energypercell, randomnumint, numberespectre, espectre, xdimension, ydimension, zdimension, particlesequilibrium, totalparticles;
+	double randomnumdouble, particlespercell, totalenergy, energyequilibrium;
 };
 class Particletype : public Randomgenerationdata {
 	public:
