@@ -1,0 +1,8 @@
+set style line 1 lt 1 lc rgb '#1B9E77' # dark teal
+set style line 2 lt 1 lc rgb '#D95F02' # dark orange
+set style line 3 lt 1 lc rgb '#7570B3' # dark lilac
+
+set palette maxcolors 8
+set palette defined ( 0 '#1B9E77',\
+		      1 '#D95F02',\
+		      2 '#7570B3')
