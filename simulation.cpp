@@ -50,7 +50,7 @@ int Particletype::Openfileandsavedata(string infiledata) { // como guardar los d
 		inFile >> vectorenergyspectre[i]; 
 	}
 	//cout << "funciona" << endl;
-	particlespercell=0;
+	particlespercell=0.0;
 	energypercell=0.0;
 	inFile >> particlespercell;// partículas de las celdas en equilibrio
 	inFile >> energypercell1; // energía de las celdas en equilibrio
@@ -290,7 +290,7 @@ int Particletype::Simulation(int times, int functionform){
 	//particlespercell=totalparticles/totalcells;
 	restrictionenergysuma.resize(times);
 	restrictionsuma.resize(times);
-	double timereference=0.001;
+	double timereference=0.00000001;
 	cout << energypercell1 << endl;
 	cout << "times = " << times << endl;
 	//for (int i=0; i<times; ++i){

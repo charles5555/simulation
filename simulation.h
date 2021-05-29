@@ -7,8 +7,8 @@ using std::vector;
 class Beginsimulation {
 public:
 	Beginsimulation();
-	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform, particlespercell, meantemperature;
-	double alpha, time, coef, t0, energypercell, energyspectre, totalenergy, energypercell1, meanpotential;
+	int xdimension, ydimension, zdimension, cellnumber, totalcells, totallines, cero1, cero2, init, m, totalparticles, totallines1, times1, times, functionform;
+	double alpha, time, coef, t0, energypercell, energyspectre, totalenergy, energypercell1, meanpotential, meantemperature,  particlespercell;
 	string infiledata;
 };
 class Particletype : public Beginsimulation {
